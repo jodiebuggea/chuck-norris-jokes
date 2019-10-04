@@ -1,6 +1,7 @@
 <?php
 
 namespace jodiebuggea\ChuckNorrisJokes;
+use jodiebuggea\ChuckNorrisJokes\Console\ChuckNorrisJoke;
 use jodiebuggea\ChuckNorrisJokes\Console\ChuckNorrisJokes;
 use Illuminate\Support\ServiceProvider;
 
