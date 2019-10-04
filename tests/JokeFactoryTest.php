@@ -2,6 +2,10 @@
 
 namespace jodiebuggea\ChuckNorrisJokes\Jokes;
 
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
+use http\Client;
 use jodiebuggea\ChuckNorrisJokes\JokeFactory;
 use PHPUnit\Framework\TestCase;
 
@@ -11,27 +15,14 @@ class JokeFactoryTest extends TestCase
 
 public function it_returns_a_random_joke()
 {
-    $jokes = new JokeFactory([
-            'This is a joke',
-        ]
-    );
+    $mock = new MockHandler([
+       new Response(200, [],'{ "type": "success", "value": { "id": 268, "joke": "Time waits for no man. Unless that man is Chuck Norris." } }' ),
+    ]);
+    $handler = HandlerStack::create($mock);
+    $client = new \GuzzleHttp\Client();
+    $jokes = new JokeFactory($client);
     $joke = $jokes->getRandomJoke();
 
-    $this->assertSame('This is a joke', $joke);
+    $this->assertSame('Time waits for no man. Unless that man is Chuck Norris.', $joke);
 }
-    /** @test  */
-    public function it_returns_a_predefined_joke()
-    {
-
-        $cnj = [
-        'Time waits for no man. Unless that man is Chuck Norris.',
-        'Fool me once, shame on you. Fool Chuck Norris once and he will roundhouse kick you in the face.',
-        'There is no theory of evolution, just a list of creatures Chuck Norris allows to live.'
-    ];
-        $jokes = new JokeFactory();
-        $joke = $jokes->getRandomJoke();
-
-        $this->assertContains($joke, $cnj);
-    }
-
 }
